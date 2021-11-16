@@ -1,9 +1,10 @@
 console.log("working");
 
 // Create the map object with a center and zoom level.
-let map = L.map('mapid').setView([37.5, -122.5], 10);
+let map = L.map('mapid').setView([30, 30], 2);
+let airportData = "https://raw.githubusercontent.com/chrisagarcia/Mapping_Earthquakes/main/majorAirports.json";
 
-L.tileLayer("https://api.mapbox.com/")
+L.tileLayer("https://api.mapbox.com/");
 
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -37,10 +38,20 @@ let sanFranAirport =
 
 
 // ffunction for creating a map object of geoJSON
-L.geoJSON(sanFranAirport, {
-    onEachFeature: (feature, layer) => {
-        console.log(feature);
-        console.log(layer);
-        layer.bindPopup(`<h2>${feature.properties.name}</h2><hr><h4>${feature.properties.city}, ${feature.properties.country}</h4>`);
-    }
-}).addTo(map);
+// L.geoJSON(sanFranAirport, {
+//     onEachFeature: (feature, layer) => {
+//         console.log(feature);
+//         console.log(layer);
+//         layer.bindPopup(`<h2>${feature.properties.name}</h2><hr><h4>${feature.properties.city}, ${feature.properties.country}</h4>`);
+//     }
+// }).addTo(map);
+
+// geojson data from github
+d3.json(airportData).then(data => {
+    console.log(data);
+    L.geoJson(data, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(`<h2>${feature.properties.name}</h2><hr><h4>${feature.properties.city}, ${feature.properties.country}</h4>`);
+        }
+    }).addTo(map);
+});
