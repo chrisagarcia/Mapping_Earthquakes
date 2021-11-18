@@ -20,22 +20,29 @@ let baseMaps = {
 
 // Create the map object with a center and zoom level.
 let map = L.map('mapid', {
-    center: [30, 30],
-    zoom: 2,
+    center: [44.0, -80.0],
+    zoom: 3,
     layers: [streets]
 });
 
 L.control.layers(baseMaps).addTo(map);
 
 // geoJSON url from github
-let routes = "https://raw.githubusercontent.com/chrisagarcia/Mapping_Earthquakes/main/majorAirports.json";
+let torontoData = "https://raw.githubusercontent.com/chrisagarcia/Mapping_Earthquakes/main/torontoRoutes.json";
+
+// Create a style for the lines.
+let myStyle = {
+    color: "#ffffa1",
+    weight: 2
+}
 
 // using the onEachFeature callback inside L.geoJSON
-d3.json(routes).then(data => {
+d3.json(torontoData).then(data => {
     console.log(data);
     L.geoJson(data, {
+        style: myStyle,
         onEachFeature: (feature, layer) => {
-            layer.bindPopup(`<h2>${feature.properties.name}</h2><hr><h4>${feature.properties.city}, ${feature.properties.country}</h4>`);
+            layer.bindPopup(`<h3>Airline: ${feature.properties.airline}</h3><hr><h3>Destination: ${feature.properties.dst}</h3>`)
         }
     }).addTo(map);
 });
