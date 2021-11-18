@@ -20,7 +20,7 @@ let baseMaps = {
 
 // Create the map object with a center and zoom level.
 let map = L.map('mapid', {
-    center: [44.0, -80.0],
+    center: [-79.39119482699992, 43.68108112399995],
     zoom: 3,
     layers: [streets]
 });
@@ -28,16 +28,16 @@ let map = L.map('mapid', {
 L.control.layers(baseMaps).addTo(map);
 
 // geoJSON url from github
-let torontoData = "https://raw.githubusercontent.com/chrisagarcia/Mapping_Earthquakes/main/torontoRoutes.json";
+let torontoNeighbor = "https://raw.githubusercontent.com/chrisagarcia/Mapping_Earthquakes/main/torontoNeighborhoods.json";
 
 // Create a style for the lines.
 let myStyle = {
-    color: "#ffffa1",
+    color: "#080808",
     weight: 2
 }
 
 // using the onEachFeature callback inside L.geoJSON
-d3.json(torontoData).then(data => {
+d3.json(torontoNeighbor).then(data => {
     console.log(data);
     L.geoJson(data, {
         style: myStyle,
