@@ -38,12 +38,33 @@ function getRadius(magnitude) {
     return magnitude * 4;
 }
 
+// funciton for assigning a color
+function getColor(magnitude) {
+    if (magnitude > 5) {
+      return "#ea2c2c";
+    }
+    if (magnitude > 4) {
+      return "#ea822c";
+    }
+    if (magnitude > 3) {
+      return "#ee9c00";
+    }
+    if (magnitude > 2) {
+      return "#eecc00";
+    }
+    if (magnitude > 1) {
+      return "#d4ee00";
+    }
+    return "#98ee00";
+  }
+
+
 // style data for each of the eqs, mag goes in to calc th eradius
 function styleInfo(feature) {
     return {
         opacity: 1,
         fillOpacity: 1,
-        fillColor: "#ffae42",
+        fillColor: getColor(feature.properties.mag),
         color: "#000000",
         radius: getRadius(feature.properties.mag),
         stroke: true,
@@ -58,6 +79,9 @@ d3.json(eqData).then(data => {
         pointToLayer: (feature, latlng) => {
             console.log(data);
             return L.circleMarker(latlng);
+        },
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
         },
         style: styleInfo
     }).addTo(map);
