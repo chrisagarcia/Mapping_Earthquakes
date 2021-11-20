@@ -25,7 +25,7 @@ let map = L.map('mapid', {
     layers: [streets]
 });
 
-L.control.layers(baseMaps).addTo(map);
+// L.control.layers(baseMaps).addTo(map);
 
 // geoJSON url from github
 let eqData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
@@ -72,9 +72,26 @@ function styleInfo(feature) {
     };
 }
 
+
+// eq layer
+let earthquakes = new L.layerGroup();
+
+let plates = new L.layerGroup();
+
+// overlay obj
+let overlays = {
+    Earthquakes: earthquakes,
+    Tectonics: plates
+};
+
+// user controll
+L.control.layers(baseMaps, overlays).addTo(map);
+
+
+
 // using the onEachFeature callback inside L.geoJSON
 d3.json(eqData).then(data => {
-    console.log(data);
+    // console.log(data);
     L.geoJson(data, {
         pointToLayer: (feature, latlng) => {
             console.log(data);
@@ -84,5 +101,45 @@ d3.json(eqData).then(data => {
             layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
         },
         style: styleInfo
-    }).addTo(map);
+    }).addTo(earthquakes);
 });
+
+// adding tectonic plate lines for fun
+let tectonicData = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
+d3.json(tectonicData).then(data => {
+    L.geoJson(data, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(`Name: ${feature.properties.Name}`)
+        }
+    }).addTo(plates);
+});
+
+// legend control object
+let legend = L.control({position: "bottomright"});
+
+
+// add legend details
+legend.onAdd = function() {
+    let div = L.DomUtil.create("div", "info legend");
+
+    const magnitudes = [0, 1, 2, 3, 4, 5];
+    const colors = [
+    "#98ee00",
+    "#d4ee00",
+    "#eecc00",
+    "#ee9c00",
+    "#ea822c",
+    "#ea2c2c"
+    ];
+
+    // loop through the intervals to generate the label with color square
+    for (var i=0; i < magnitudes.length; i++) {
+        console.log(colors[i]);
+        div.innerHTML +=
+        "<i style='background: " + colors[i] + "'></i> " +
+        magnitudes[i] + (magnitudes[i + 1] ? "&ndash;" + magnitudes[i + 1] + "<br>" : "+");
+    }
+    return div;
+};
+
+legend.addTo(map);
