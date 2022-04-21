@@ -2,5 +2,18 @@
 
 This project utilizes d3, leaflet and mapbox CDNs to format and display geological data from geoJSON streams.
 
+---
+This project served as an exploration of leaflet and the geoJSON data format.
 
-The goal was to create a map that shows the last 7 days of earthquake data in an accessable form. I also included another large earthquake filter as well as an option to toggle tectonic plate boundaries as well as the ability to switch mapbox map styles i.e. "dark", "streets", and "sattelite".
+The major goal of this project was to create a format that shows the last 7 days of earthquake data in an accessable form.
+
+Earthquake Map
+---
+<img src="earthquake_map.png" />
+
+---
+
+ I also included another large earthquake filter as well as an option to toggle tectonic plate boundaries as well as the ability to switch mapbox map styles i.e. "dark", "streets", and "sattelite".
+
+
+
